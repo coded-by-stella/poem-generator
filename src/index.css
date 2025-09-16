@@ -1,4 +1,249 @@
-body {
-    background: rgb(255, 187, 255);
-    text-align: center;
+/* ===========================
+   Brand Vars + Design Tokens
+   =========================== */
+:root{
+  /* brand */
+  --blue:#38b6ff;
+  --lilac:#ab8bf9;
+  --ink:#1f1f1f;
+  --ink-soft:#3b3b3b;
+  --paper:#ffffff;
+
+  /* ui */
+  --radius-lg:20px;
+  --radius-md:12px;
+  --shadow-sm:0 4px 14px rgba(0,0,0,.06);
+  --shadow-md:0 10px 30px rgba(0,0,0,.10);
+  --shadow-lg:0 20px 50px rgba(0,0,0,.12);
+
+  /* motion */
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --dur-fast:.18s;
+  --dur:.35s;
+
+  /* type (fluid) */
+  --h1: clamp(2rem, 1.2rem + 3vw, 3rem);
+  --body: clamp(1rem, .95rem + .2vw, 1.05rem);
+
+  /* glass */
+  --glass: rgba(255,255,255,.22);
+  --glass-border: rgba(255,255,255,.35);
+}
+
+/* ===========================
+   Base Reset
+   =========================== */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: var(--ink);
+  line-height: 1.55;
+  font-size: var(--body);
+
+  /* subtle animated gradient */
+  background: linear-gradient(135deg, var(--blue), var(--lilac));
+  background-size: 200% 200%;
+  animation: bgShift 12s var(--ease) infinite alternate;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+
+/* reduce motion preference */
+@media (prefers-reduced-motion: reduce){
+  body{ animation: none; }
+}
+
+/* ===========================
+   Page Structure
+   =========================== */
+header{
+  text-align:center;
+  padding: 3.2rem 1.25rem 2rem;
+  color:#fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.12);
+  animation: fadeSlide .7s var(--ease) both;
+}
+header h1{
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: var(--h1);
+  letter-spacing:.5px;
+}
+.subtitle{ opacity:.9; margin-top:.35rem; }
+
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 1.5rem;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+/* Glassy form card */
+.form-section{
+  width:100%;
+  max-width: 720px;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  transform: translateY(8px);
+  animation: rise .6s var(--ease) .12s both;
+}
+
+/* Output card */
+.output-section{
+  width:100%;
+  max-width: 720px;
+  animation: fadeSlide .7s var(--ease) .1s both;
+}
+.poem-box{
+  background: var(--paper);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.04);
+  position: relative;
+  overflow: clip;
+}
+.poem-box::before{
+  /* subtle left accent bar using brand gradient */
+  content:"";
+  position:absolute; inset:0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--lilac), var(--blue));
+  opacity:.9;
+}
+
+/* ===========================
+   Form + Inputs
+   =========================== */
+form{ display:flex; gap:.8rem; flex-wrap: wrap; }
+form input[type="text"]{
+  flex:1 1 420px;
+  padding: 0.95rem 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgba(255,255,255,.9);
+  outline: none;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+}
+form input[type="text"]::placeholder{ color:#8a8a8a; }
+form input[type="text"]:hover{
+  border-color: rgba(0,0,0,.14);
+}
+form input[type="text"]:focus-visible{
+  border-color: var(--lilac);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--lilac) 28%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Primary button with micro-interactions */
+form input[type="submit"]{
+  flex: 0 0 auto;
+  padding: 0.95rem 1.15rem;
+  border-radius: var(--radius-md);
+  border: 0;
+  background: linear-gradient(135deg, var(--lilac), var(--blue));
+  color: #fff;
+  font-weight: 600;
+  letter-spacing:.2px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur) var(--ease), filter var(--dur) var(--ease);
+}
+form input[type="submit"]:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: saturate(1.08);
+}
+form input[type="submit"]:active{
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Keyboard accessibility emphasis */
+:where(input, button, a):focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 28%, transparent);
+  border-color: var(--blue);
+}
+
+/* ===========================
+   Footer
+   =========================== */
+footer{
+  text-align:center;
+  padding: 2rem 1rem 2.4rem;
+  color:#fff;
+  opacity:.96;
+  animation: fadeSlide .8s var(--ease) .08s both;
+}
+footer a{
+  color:#fff; font-weight:700; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.55);
+  transition: border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+footer a:hover{ border-color:#fff; opacity:.9; }
+
+/* ===========================
+   Nice-to-have polish
+   =========================== */
+
+/* custom text selection */
+::selection{ background: color-mix(in srgb, var(--blue) 35%, var(--lilac)); color:#fff; }
+
+/* elegant scrollbar (only for desktop webkit) */
+@media (hover:hover){
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background: rgba(255,255,255,.25); }
+  ::-webkit-scrollbar-thumb{
+    background: linear-gradient(180deg, var(--blue), var(--lilac));
+    border-radius: 999px;
+    border: 2px solid rgba(255,255,255,.4);
+  }
+}
+
+/* card hover “lift” for output */
+.poem-box:hover{
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+/* muted placeholder inside output */
+.placeholder{
+  color: var(--ink-soft);
+  opacity:.75;
+  text-align:center;
+  font-style: italic;
+}
+
+/* responsive spacing tweaks */
+@media (max-width: 560px){
+  .form-section{ padding: 1.25rem; }
+  form{ gap:.6rem; }
+}
+
+/* ===========================
+   Keyframes
+   =========================== */
+@keyframes bgShift{
+  0%{ background-position: 0% 50%; }
+  100%{ background-position: 100% 50%; }
+}
+@keyframes fadeSlide{
+  from{ opacity:0; transform: translateY(8px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+@keyframes rise{
+  from{ opacity:0; transform: translateY(16px); }
+  to{ opacity:1; transform: translateY(0); }
 }
