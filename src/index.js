@@ -48,7 +48,7 @@ async function typeText(el, text, delay = 12) {
 /* === Prompt builder === */
 function buildPrompt(topic) {
   return `Write a short, original free-verse poem (6–10 lines) in English about "${topic}".
-Use vivid imagery and fresh metaphors in a gentle uplifting tone. Never use —.
+Use vivid imagery and fresh metaphors in a gentle uplifting tone. Never use em dash.
 Avoid clichés and forced rhymes. End with a subtle resonant final line.`;
 }
 
@@ -63,6 +63,7 @@ function extractText(data) {
     ""
   )
     .toString()
+    .replace(/—/g, "")
     .trim();
 }
 
