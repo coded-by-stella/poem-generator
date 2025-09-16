@@ -55,7 +55,7 @@ async function fetchPoemFromAPI(topic) {
   // Placeholder simulation (replace with real SheCodes API request)
   await new Promise((r) => setTimeout(r, 1200));
   const demo = `Under a sky the color of ${topic},
-a hush gathers on the windowsill—
+a hush gathers on the windowsill
 and even the dust remembers music.
 
 Between your palms, the air warms
