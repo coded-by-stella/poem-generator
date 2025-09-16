@@ -1,5 +1,5 @@
 /* ===========================
-   Poem Generator - Main Script 
+   Poem Generator - Main Script (Axios)
    =========================== */
 
 /* === Config === */
@@ -7,9 +7,12 @@ const API_KEY = "ta8f14404a1b1cbdb0fo526029d3690d";
 const API_URL = "https://api.shecodes.io/ai/v1/generate";
 
 /* === DOM elements === */
-const form = document.querySelector("#poem-form");
+const form =
+  document.querySelector("#poem-form") ||
+  document.querySelector("#poem-generator-form");
 const topicInput = document.querySelector("#topic");
-const output = document.querySelector("#poem-output");
+const output =
+  document.querySelector("#poem-output") || document.querySelector("#poem");
 const submitBtn = form?.querySelector('input[type="submit"]');
 
 /* === Utility: text sanitization === */
@@ -38,7 +41,6 @@ async function typeText(el, text, delay = 12) {
   el.innerHTML = "";
   for (let i = 0; i < text.length; i++) {
     el.innerHTML += text[i] === "\n" ? "<br/>" : sanitize(text[i]);
-    // eslint-disable-next-line no-await-in-loop
     await new Promise((r) => setTimeout(r, delay));
   }
 }
@@ -64,37 +66,51 @@ function extractText(data) {
     .trim();
 }
 
-/* === API request (Axios) === */
+/* === API request (Axios GET) === */
 async function fetchPoemFromAPI(topic) {
   const prompt = buildPrompt(topic);
-
-  // POST attempt
-  try {
-    const res = await axios.post(
-      API_URL,
-      { key: API_KEY, prompt },
-      { headers: { "Content-Type": "application/json" } }
-    );
-    const text = extractText(res.data);
-    if (text) return text;
-  } catch (e) {
-    // silent fallback
-  }
-
-  // GET fallback
   const res = await axios.get(API_URL, {
     params: { key: API_KEY, prompt }
   });
-  return extractText(res.data);
+  const text = extractText(res.data);
+  if (!text) {
+    const apiMsg =
+      res?.data?.message || res?.data?.error || "Empty response from API";
+    const err = new Error(apiMsg);
+    err.response = { status: res.status, data: res.data };
+    throw err;
+  }
+  return text;
+}
+
+/* === Copy button binding === */
+function bindCopyButton() {
+  const btn = document.querySelector("#copy-poem");
+  const poemEl = output?.querySelector(".poem-text");
+  if (!btn || !poemEl) return;
+
+  btn.addEventListener("click", async () => {
+    const text = poemEl.innerText || "";
+    try {
+      await navigator.clipboard.writeText(text);
+      const prev = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(() => (btn.textContent = prev), 1200);
+    } catch {}
+  });
 }
 
 /* === Output rendering === */
 async function renderPoem(text) {
   if (!output) return;
-  output.innerHTML = `<div class="poem-text"></div>`;
-  const target = output.querySelector(".poem-text");
+  output.innerHTML = `
+    <div class="poem-text" aria-label="Generated poem">${sanitize(text).replace(/\n/g, "<br/>")}</div>
+    <button id="copy-poem" type="button" class="copy-btn" aria-label="Copy poem">Copy</button>
+  `;
 
   if (window.Typewriter) {
+    const target = output.querySelector(".poem-text");
+    target.innerHTML = "";
     new Typewriter(target, {
       strings: sanitize(text),
       autoStart: true,
@@ -102,16 +118,22 @@ async function renderPoem(text) {
       cursor: ""
     });
     const ms = Math.max(400, text.length * 12);
+    setTimeout(bindCopyButton, ms);
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  await typeText(target, text, 12);
+  bindCopyButton();
 }
 
 /* === Main handler === */
 async function generatePoem(event) {
   event.preventDefault();
   if (!topicInput || !output) return;
+
+  if (!window.axios) {
+    output.innerHTML = `<p class="placeholder">Axios is not available on this page.</p>`;
+    return;
+  }
 
   const topic = topicInput.value.trim();
   if (topic.length < 2) {
@@ -126,18 +148,19 @@ async function generatePoem(event) {
   try {
     const poem = await fetchPoemFromAPI(topic);
     stopLoader();
-    if (!poem) {
-      output.innerHTML = `<p class="placeholder">No poem returned. Try another topic.</p>`;
-    } else {
-      await renderPoem(poem);
-    }
+    await renderPoem(poem);
   } catch (err) {
     stopLoader();
-    console.error(err);
+    const status = err?.response?.status;
+    const detail =
+      err?.response?.data?.message ||
+      err?.response?.data?.error ||
+      err?.message ||
+      "Unknown error";
+    console.error("SheCodes API error:", status, detail, err?.response?.data);
     output.innerHTML = `
       <p class="placeholder">
-        Something went wrong while generating your poem.<br/>
-        Please try again later.
+        API error${status ? ` [${status}]` : ""}: ${sanitize(detail)}
       </p>
     `;
   } finally {

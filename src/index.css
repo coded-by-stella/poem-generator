@@ -1,249 +1,222 @@
 /* ===========================
-   Brand Vars + Design Tokens
+   Brand tokens
    =========================== */
-:root{
-  /* brand */
-  --blue:#38b6ff;
-  --lilac:#ab8bf9;
-  --ink:#1f1f1f;
-  --ink-soft:#3b3b3b;
-  --paper:#ffffff;
+:root {
+  --blue: #38b6ff;
+  --lilac: #ab8bf9;
+  --ink: #1f1f1f;
+  --paper: #ffffff;
 
-  /* ui */
-  --radius-lg:20px;
-  --radius-md:12px;
-  --shadow-sm:0 4px 14px rgba(0,0,0,.06);
-  --shadow-md:0 10px 30px rgba(0,0,0,.10);
-  --shadow-lg:0 20px 50px rgba(0,0,0,.12);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.12);
 
-  /* motion */
-  --ease: cubic-bezier(.2,.8,.2,1);
-  --dur-fast:.18s;
-  --dur:.35s;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 0.18s;
+  --dur: 0.35s;
 
-  /* type (fluid) */
   --h1: clamp(2rem, 1.2rem + 3vw, 3rem);
-  --body: clamp(1rem, .95rem + .2vw, 1.05rem);
-
-  /* glass */
-  --glass: rgba(255,255,255,.22);
-  --glass-border: rgba(255,255,255,.35);
+  --body: clamp(1rem, 0.95rem + 0.2vw, 1.05rem);
 }
 
 /* ===========================
-   Base Reset
+   Base
    =========================== */
-*{ box-sizing:border-box; margin:0; padding:0; }
-html,body{ height:100%; }
-body{
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Open Sans", system-ui, sans-serif;
   color: var(--ink);
   line-height: 1.55;
   font-size: var(--body);
-
-  /* subtle animated gradient */
   background: linear-gradient(135deg, var(--blue), var(--lilac));
   background-size: 200% 200%;
   animation: bgShift 12s var(--ease) infinite alternate;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  display:flex; flex-direction:column; justify-content:space-between;
-}
-
-/* reduce motion preference */
-@media (prefers-reduced-motion: reduce){
-  body{ animation: none; }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* ===========================
-   Page Structure
+   Header
    =========================== */
-header{
-  text-align:center;
-  padding: 3.2rem 1.25rem 2rem;
-  color:#fff;
-  text-shadow: 0 2px 8px rgba(0,0,0,.12);
-  animation: fadeSlide .7s var(--ease) both;
+header {
+  text-align: center;
+  padding: 3rem 1.25rem 2rem;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
-header h1{
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-  font-weight: 700;
+header h1 {
+  font-family: "Playfair Display", serif;
   font-size: var(--h1);
-  letter-spacing:.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
-.subtitle{ opacity:.9; margin-top:.35rem; }
+.subtitle {
+  opacity: 0.9;
+  margin-top: 0.35rem;
+}
 
-main{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap: 1.5rem;
+/* ===========================
+   Layout
+   =========================== */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
   padding: 1.25rem 1.25rem 2rem;
 }
 
-/* Glassy form card */
-.form-section{
-  width:100%;
+/* ===========================
+   Form
+   =========================== */
+.form-section {
+  width: 100%;
   max-width: 720px;
-  background: var(--glass);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
   box-shadow: var(--shadow-md);
-  transform: translateY(8px);
-  animation: rise .6s var(--ease) .12s both;
 }
 
-/* Output card */
-.output-section{
-  width:100%;
-  max-width: 720px;
-  animation: fadeSlide .7s var(--ease) .1s both;
-}
-.poem-box{
-  background: var(--paper);
-  border-radius: var(--radius-md);
-  padding: 1.5rem 1.75rem;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(0,0,0,.04);
-  position: relative;
-  overflow: clip;
-}
-.poem-box::before{
-  /* subtle left accent bar using brand gradient */
-  content:"";
-  position:absolute; inset:0 auto 0 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--lilac), var(--blue));
-  opacity:.9;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* ===========================
-   Form + Inputs
-   =========================== */
-form{ display:flex; gap:.8rem; flex-wrap: wrap; }
-form input[type="text"]{
-  flex:1 1 420px;
-  padding: 0.95rem 1.1rem;
+form input[type="text"] {
+  padding: 0.95rem 1.2rem;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(0,0,0,.08);
-  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.95);
   outline: none;
-  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+  transition: border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
 }
-form input[type="text"]::placeholder{ color:#8a8a8a; }
-form input[type="text"]:hover{
-  border-color: rgba(0,0,0,.14);
-}
-form input[type="text"]:focus-visible{
+
+form input[type="text"]:focus-visible {
   border-color: var(--lilac);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--lilac) 28%, transparent);
   transform: translateY(-1px);
 }
 
-/* Primary button with micro-interactions */
-form input[type="submit"]{
-  flex: 0 0 auto;
+form input[type="submit"] {
   padding: 0.95rem 1.15rem;
   border-radius: var(--radius-md);
   border: 0;
   background: linear-gradient(135deg, var(--lilac), var(--blue));
   color: #fff;
   font-weight: 600;
-  letter-spacing:.2px;
+  letter-spacing: 0.2px;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur) var(--ease), filter var(--dur) var(--ease);
-}
-form input[type="submit"]:hover{
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  filter: saturate(1.08);
-}
-form input[type="submit"]:active{
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
-/* Keyboard accessibility emphasis */
-:where(input, button, a):focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 28%, transparent);
-  border-color: var(--blue);
+form input[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===========================
+   Output
+   =========================== */
+.output-section {
+  width: 100%;
+  max-width: 720px;
+}
+
+.poem-text {
+  background: #fff;
+  border-left: 4px solid var(--lilac);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 120px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.placeholder {
+  color: #777;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ===========================
+   Copy button
+   =========================== */
+.copy-btn {
+  display: inline-block;
+  margin-top: 0.9rem;
+  padding: 0.6rem 1.1rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--lilac), var(--blue));
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.copy-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.copy-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ===========================
    Footer
    =========================== */
-footer{
-  text-align:center;
+footer {
+  text-align: center;
   padding: 2rem 1rem 2.4rem;
-  color:#fff;
-  opacity:.96;
-  animation: fadeSlide .8s var(--ease) .08s both;
+  color: #fff;
+  opacity: 0.96;
+  font-size: 0.9rem;
 }
-footer a{
-  color:#fff; font-weight:700; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,.55);
-  transition: border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+footer a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.55);
 }
-footer a:hover{ border-color:#fff; opacity:.9; }
+footer a:hover {
+  border-color: #fff;
+  opacity: 0.9;
+}
 
 /* ===========================
-   Nice-to-have polish
+   Animations
    =========================== */
-
-/* custom text selection */
-::selection{ background: color-mix(in srgb, var(--blue) 35%, var(--lilac)); color:#fff; }
-
-/* elegant scrollbar (only for desktop webkit) */
-@media (hover:hover){
-  ::-webkit-scrollbar{ width:10px; height:10px; }
-  ::-webkit-scrollbar-track{ background: rgba(255,255,255,.25); }
-  ::-webkit-scrollbar-thumb{
-    background: linear-gradient(180deg, var(--blue), var(--lilac));
-    border-radius: 999px;
-    border: 2px solid rgba(255,255,255,.4);
+@keyframes bgShift {
+  0% {
+    background-position: 0% 50%;
   }
-}
-
-/* card hover “lift” for output */
-.poem-box:hover{
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
-}
-
-/* muted placeholder inside output */
-.placeholder{
-  color: var(--ink-soft);
-  opacity:.75;
-  text-align:center;
-  font-style: italic;
-}
-
-/* responsive spacing tweaks */
-@media (max-width: 560px){
-  .form-section{ padding: 1.25rem; }
-  form{ gap:.6rem; }
-}
-
-/* ===========================
-   Keyframes
-   =========================== */
-@keyframes bgShift{
-  0%{ background-position: 0% 50%; }
-  100%{ background-position: 100% 50%; }
-}
-@keyframes fadeSlide{
-  from{ opacity:0; transform: translateY(8px); }
-  to{ opacity:1; transform: translateY(0); }
-}
-@keyframes rise{
-  from{ opacity:0; transform: translateY(16px); }
-  to{ opacity:1; transform: translateY(0); }
+  100% {
+    background-position: 100% 50%;
+  }
 }
