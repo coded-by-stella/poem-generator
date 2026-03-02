@@ -1,115 +1,139 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="light">
-<head>
-  <!-- Meta -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <!-- Meta -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Title -->
-  <title>AI Poem Generator</title>
+    <!-- Title -->
+    <title>AI Poem Generator</title>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="src/index.css" />
-</head>
-<body>
-  <!-- Header -->
-  <header>
-    <h1 id="title">AI Poem Generator</h1>
-    <p id="subtitle" class="subtitle">Create unique poems with the power of AI - Coded_by_Stella ✨</p>
-  </header>
+    <!-- Styles -->
+    <link rel="stylesheet" href="src/index.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <h1 id="title">AI Poem Generator</h1>
+      <p id="subtitle" class="subtitle">
+        Create unique poems with the power of AI - Coded_by_Stella ✨
+      </p>
+    </header>
 
-  <!-- Main -->
-  <main>
-    <!-- Controls -->
-    <section class="controls" aria-label="Controls">
-      <div class="control">
-        <label id="label-language" for="language">Language</label>
-        <select id="language" aria-labelledby="label-language">
-          <option value="en" selected>English</option>
-          <option value="it">Italiano</option>
-          <option value="no">Norsk</option>
-        </select>
+    <!-- Main -->
+    <main>
+      <!-- Controls -->
+      <section class="controls" aria-label="Controls">
+        <div class="control">
+          <label id="label-language" for="language">Language</label>
+          <select id="language" aria-labelledby="label-language">
+            <option value="en" selected>English</option>
+            <option value="it">Italiano</option>
+            <option value="no">Norsk</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label id="label-style" for="style">Style</label>
+          <select id="style" aria-labelledby="label-style">
+            <option value="free_verse" selected>Free verse</option>
+            <option value="haiku">Haiku</option>
+            <option value="sonnet">Sonnet</option>
+            <option value="tanka">Tanka</option>
+            <option value="limerick">Limerick</option>
+            <option value="villanelle">Villanelle</option>
+            <option value="ode">Ode</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label id="label-mood" for="mood">Mood</label>
+          <select id="mood" aria-labelledby="label-mood">
+            <option value="calm" selected>Calm</option>
+            <option value="joyful">Joyful</option>
+            <option value="melancholic">Melancholic</option>
+            <option value="romantic">Romantic</option>
+            <option value="mysterious">Mysterious</option>
+            <option value="hopeful">Hopeful</option>
+            <option value="nostalgic">Nostalgic</option>
+          </select>
+        </div>
+
+        <div class="control range">
+          <label id="label-lines" for="lines">Lines</label>
+          <input
+            id="lines"
+            type="range"
+            min="3"
+            max="100"
+            step="1"
+            value="8"
+            aria-labelledby="label-lines"
+          />
+          <span id="lines-value" aria-live="polite">8</span>
+        </div>
+
+        <button
+          id="theme-toggle"
+          type="button"
+          aria-pressed="false"
+          aria-label="Toggle dark mode"
+        >
+          Dark mode
+        </button>
+      </section>
+
+      <!-- Form -->
+      <section class="form-section">
+        <form id="poem-form">
+          <input
+            type="text"
+            id="topic"
+            placeholder="Enter the topic of the poem you want to generate 📜"
+            autocomplete="off"
+            required
+            autofocus
+          />
+          <input id="generate-btn" type="submit" value="Generate Poem" />
+        </form>
+      </section>
+
+      <!-- Output -->
+      <section class="output-section">
+        <div
+          id="poem-output"
+          class="poem-box"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <p class="placeholder">Your poem will appear here 💭</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <p id="footer-text">
+          This Project was designed and coded by
+          <a
+            id="footer-link-name"
+            href="https://stellamarraliwebcv.netlify.app/"
+            target="_blank"
+            >Stella Marrali</a
+          >.
+        </p>
       </div>
+    </footer>
 
-      <div class="control">
-        <label id="label-style" for="style">Style</label>
-        <select id="style" aria-labelledby="label-style">
-          <option value="free_verse" selected>Free verse</option>
-          <option value="haiku">Haiku</option>
-          <option value="sonnet">Sonnet</option>
-          <option value="tanka">Tanka</option>
-          <option value="limerick">Limerick</option>
-          <option value="villanelle">Villanelle</option>
-          <option value="ode">Ode</option>
-        </select>
-      </div>
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <!-- Optional: Typewriter effect -->
+    <!-- <script src="https://unpkg.com/typewriter-effect@2.19.0/dist/core.js"></script> -->
 
-      <div class="control">
-        <label id="label-mood" for="mood">Mood</label>
-        <select id="mood" aria-labelledby="label-mood">
-          <option value="calm" selected>Calm</option>
-          <option value="joyful">Joyful</option>
-          <option value="melancholic">Melancholic</option>
-          <option value="romantic">Romantic</option>
-          <option value="mysterious">Mysterious</option>
-          <option value="hopeful">Hopeful</option>
-          <option value="nostalgic">Nostalgic</option>
-        </select>
-      </div>
-
-      <div class="control range">
-        <label id="label-lines" for="lines">Lines</label>
-        <input id="lines" type="range" min="3" max="100" step="1" value="8" aria-labelledby="label-lines" />
-        <span id="lines-value" aria-live="polite">8</span>
-      </div>
-
-      <button id="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle dark mode">
-        Dark mode
-      </button>
-    </section>
-
-    <!-- Form -->
-    <section class="form-section">
-      <form id="poem-form">
-        <input
-          type="text"
-          id="topic"
-          placeholder="Enter the topic of the poem you want to generate 📜"
-          autocomplete="off"
-          required
-          autofocus
-        />
-        <input id="generate-btn" type="submit" value="Generate Poem" />
-      </form>
-    </section>
-
-    <!-- Output -->
-    <section class="output-section">
-      <div id="poem-output" class="poem-box" role="status" aria-live="polite" aria-atomic="true">
-        <p class="placeholder">Your poem will appear here 💭</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <p id="footer-text">
-      This AI project was coded with ❤️ by
-      <a id="footer-link-name" href="https://portfolio-codedbystella.netlify.app/" target="_blank">Stella Marrali</a>,
-      is open-sourced on
-      <a id="footer-link-github" href="https://github.com/coded-by-stella/poem-generator" target="_blank">GitHub</a>
-      and hosted on
-      <a id="footer-link-host" href="https://poem-generator-coded-by-stella.netlify.app/" target="_blank">Netlify</a>.
-    </p>
-  </footer>
-
-  <!-- Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <!-- Optional: Typewriter effect -->
-  <!-- <script src="https://unpkg.com/typewriter-effect@2.19.0/dist/core.js"></script> -->
-
-  <!-- App -->
-  <script src="src/index.js"></script>
-</body>
+    <!-- App -->
+    <script src="src/index.js"></script>
+  </body>
 </html>
